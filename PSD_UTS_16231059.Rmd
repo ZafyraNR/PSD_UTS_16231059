@@ -1,0 +1,129 @@
+---
+title: "PSDB_UTS_16231059"
+output: html_document
+date: "2025-04-16"
+---
+
+```{r load-packages, echo=FALSE, message=FALSE}
+suppressWarnings({
+  library(dsbox)
+  library(tidyverse)
+  library(scales)
+})
+
+data("lego_sales")
+glimpse(lego_sales)
+```
+## 1. Eksplorasi data awal
+- Tampilkan informasi umum dataset (jumlah data, kolom, tipe data).
+- Lakukan pembersihan data sederhana jika diperlukan (null values, duplikat, dll).
+
+**Jawaban:**
+```{r}
+# Load dataset
+dimensi <- dim(lego_sales)
+jumlah_baris <- dimensi[1]
+jumlah_kolom <- dimensi[2]
+tipe_data <- sapply(lego_sales, class)
+summary(lego_sales) # statistik ringkasan
+
+# Pembersihan dataset
+na_total <- colSums(is.na(lego_sales)) # Cek missing values
+duplikat_sebelum <- nrow(lego_sales) - nrow(lego_sales %>% distinct())
+
+lego_sales <- lego_sales %>% distinct() # Hapus data duplikat
+
+lego_sales <- lego_sales %>% # Menambahkan kolom data baru (Customer id) untuk no 2 visualisasi 1
+  mutate(customer_id = paste(first_name, last_name, sep = "_"))
+
+lego_sales <- lego_sales %>% # Menambahkan kolom data baru (Revenue) untuk no 2 visualisasi 5
+  mutate(revenue = us_price * quantity)
+
+# Tampilkan kesimpulan
+list(
+  Jumlah_Baris = jumlah_baris,
+  Jumlah_Kolom = jumlah_kolom,
+  Tipe_Data = tipe_data,
+  Jumlah_Missing_Values_Per_Kolom = na_total,
+  Duplikat_Terhapus = duplikat_sebelum
+)
+```
+## 2. Eksplorasi data awal
+Visualisasi Wajib Buat minimal 5 visualisasi dari kategori berikut:
+
+- 10 customer dengan jumlah transaksi terbanyak
+- 10 tema LEGO Terpopuler Berdasarkan Penjualan
+- Sebaran Jumlah Pieces dan Harga
+- Komposisi Penjualan Berdasarkan Usia
+- Heatmap Korelasi Antar Variabel Numerik
+
+**Jawaban:**
+
+- Visualisasi 1 -> 10 customer dengan jumlah transaksi terbanyak
+```{r}
+top_customers <- lego_sales %>%
+  count(customer_id, sort = TRUE) %>%
+  slice_max(n, n = 10)
+
+ggplot(top_customers, aes(x = reorder(customer_id, n), y = n)) +
+  geom_col(fill = "deeppink3") +
+  coord_flip() +
+  labs(title = "10 Customer dengan Jumlah Transaksi Terbanyak",
+       x = "Customer", y = "Jumlah Transaksi") +
+  theme_minimal()
+```
+
+- Visualisasi 2 -> 10 tema LEGO Terpopuler Berdasarkan Penjualan
+```{r}
+top_themes <- lego_sales %>%
+  group_by(theme) %>%
+  summarise(total_quantity = sum(quantity, na.rm = TRUE)) %>%
+  arrange(desc(total_quantity)) %>%
+  slice_head(n = 10)
+
+ggplot(top_themes, aes(x = reorder(theme, total_quantity), y = total_quantity)) +
+  geom_col(fill = "deeppink3") +
+  coord_flip() +
+  labs(title = "10 Tema LEGO Terpopuler Berdasarkan Penjualan",
+       x = "Theme", y = "Jumlah Terjual") +
+  theme_minimal()
+```
+
+- Visualisasi 3 -> Sebaran Jumlah Pieces dan Harga
+```{r}
+ggplot(lego_sales, aes(x = pieces, y = us_price)) +
+  geom_point(alpha = 0.6, color = "deeppink3") +
+  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
+  labs(title = "Sebaran Jumlah Pieces vs Harga",
+       x = "Jumlah Pieces", y = "Harga (USD)") +
+  theme_minimal()
+```
+
+- Visualisasi 4 -> Komposisi Penjualan Berdasarkan Usia
+```{r}
+penjualan_usia <- lego_sales %>%
+  group_by(age) %>%
+  summarise(total_quantity = sum(quantity, na.rm = TRUE))
+
+ggplot(penjualan_usia, aes(x = age, y = total_quantity)) +
+  geom_col(fill = "deeppink3") +
+  labs(title = "Komposisi Penjualan Berdasarkan Usia Customer",
+       x = "Usia", y = "Jumlah Terjual") +
+  theme_minimal()
+```
+
+- Visualisasi 5 -> Heatmap Korelasi Antar Variabel Numerik
+```{r}
+numerik_data <- lego_sales %>%
+  select(age, pieces, us_price, quantity, revenue)
+
+cor_matrix <- cor(numerik_data, use = "complete.obs")
+cor_df <- as.data.frame(as.table(cor_matrix))
+
+ggplot(cor_df, aes(x = Var1, y = Var2, fill = Freq)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = round(Freq, 2)), color = "white", size = 4) +
+  scale_fill_gradient(low = "pink", high = "deeppink3") +
+  labs(title = "Heatmap Korelasi Variabel Numerik", fill = "Korelasi") +
+  theme_minimal()
+```
