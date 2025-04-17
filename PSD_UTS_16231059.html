@@ -375,16 +375,13 @@ display: none;
 ## $ quantity     &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 3, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, …</code></pre>
 <div id="eksplorasi-data-awal" class="section level2">
 <h2>1. Eksplorasi data awal</h2>
-<ul>
-<li>Tampilkan informasi umum dataset (jumlah data, kolom, tipe
-data).</li>
-<li>Lakukan pembersihan data sederhana jika diperlukan (null values,
-duplikat, dll).</li>
-</ul>
+<p><strong>1.1 Tampilkan informasi umum dataset (jumlah data, kolom,
+tipe data).</strong></p>
+<p><strong>1.2 Lakukan pembersihan data sederhana jika diperlukan (null
+values, duplikat, dll).</strong></p>
 <p><strong>Jawaban:</strong></p>
-<ul>
-<li>Informasi umum</li>
-</ul>
+<div id="informasi-umum" class="section level3">
+<h3>1.1 Informasi umum</h3>
 <pre class="r"><code># Load dataset
 dimensi &lt;- dim(lego_sales)
 jumlah_baris &lt;- dimensi[1]
@@ -423,9 +420,9 @@ summary(lego_sales) # statistik ringkasan</code></pre>
 ##                     3rd Qu.:2.000  
 ##                     Max.   :5.000  
 ## </code></pre>
-<ul>
-<li>Pembersihan data</li>
-</ul>
+</div>
+<div id="pembersihan-data" class="section level3">
+<h3>1.2 Pembersihan data</h3>
 <pre class="r"><code># Pembersihan dataset
 na_total &lt;- colSums(is.na(lego_sales)) # Cek missing values
 duplikat_sebelum &lt;- nrow(lego_sales) - nrow(lego_sales %&gt;% distinct())
@@ -471,24 +468,21 @@ list(
 ## $Duplikat_Terhapus
 ## [1] 0</code></pre>
 </div>
+</div>
 <div id="eksplorasi-data-awal-1" class="section level2">
 <h2>2. Eksplorasi data awal</h2>
-</div>
-<div id="visualisasi-wajib-buat-minimal-5-visualisasi-dari-kategori-berikut" class="section level2">
-<h2>Visualisasi Wajib Buat minimal 5 visualisasi dari kategori
-berikut:</h2>
-<ul>
-<li>10 customer dengan jumlah transaksi terbanyak</li>
-<li>10 tema LEGO Terpopuler Berdasarkan Penjualan</li>
-<li>Sebaran Jumlah Pieces dan Harga</li>
-<li>Komposisi Penjualan Berdasarkan Usia</li>
-<li>Heatmap Korelasi Antar Variabel Numerik</li>
-</ul>
+<p><strong>Visualisasi Wajib Buat minimal 5 visualisasi dari kategori
+berikut:</strong></p>
+<p><strong>2.1 10 customer dengan jumlah transaksi
+terbanyak</strong></p>
+<p><strong>2.2 10 tema LEGO Terpopuler Berdasarkan
+Penjualan</strong></p>
+<p><strong>2.3 Sebaran Jumlah Pieces dan Harga</strong></p>
+<p><strong>2.4 Komposisi Penjualan Berdasarkan Usia</strong></p>
+<p><strong>2.5 Heatmap Korelasi Antar Variabel Numerik</strong></p>
 <p><strong>Jawaban:</strong></p>
-<ul>
-<li>Visualisasi 1 -&gt; 10 customer dengan jumlah transaksi
-terbanyak</li>
-</ul>
+<div id="customer-dengan-jumlah-transaksi-terbanyak" class="section level3">
+<h3>2.1 10 customer dengan jumlah transaksi terbanyak</h3>
 <pre class="r"><code>top_customers &lt;- lego_sales %&gt;%
   count(customer_id, sort = TRUE) %&gt;%
   slice_max(n, n = 10)
@@ -514,10 +508,9 @@ ini adalah meskipun jumlah transaksi tiap customer relatif kecil
 (maksimal sekitar 6), mereka tetap menjadi pelanggan setia yang
 melakukan pembelian berulang. Ini menunjukkan kemungkinan adanya pola
 pembelian reguler oleh customer tertentu.</p>
-<ul>
-<li>Visualisasi 2 -&gt; 10 tema LEGO Terpopuler Berdasarkan
-Penjualan</li>
-</ul>
+</div>
+<div id="tema-lego-terpopuler-berdasarkan-penjualan" class="section level3">
+<h3>2.2 10 tema LEGO Terpopuler Berdasarkan Penjualan</h3>
 <pre class="r"><code>lego_sales &lt;- lego_sales %&gt;%
   mutate(customer_id = paste(first_name, last_name, sep = &quot;_&quot;))
 
@@ -540,9 +533,9 @@ laris adalah tema Star Wars, disusul oleh tema Nexo Knights, Mixels, dan
 Gear, sehingga kesimpulan dari visuaisasi data ini adalah lego bertema
 basis cerita atau film yang kuat seperti Star Wars lebih diminati dan
 banyak dibeli.</p>
-<ul>
-<li>Visualisasi 3 -&gt; Sebaran Jumlah Pieces dan Harga</li>
-</ul>
+</div>
+<div id="sebaran-jumlah-pieces-dan-harga" class="section level3">
+<h3>2.3 Sebaran Jumlah Pieces dan Harga</h3>
 <pre class="r"><code>ggplot(lego_sales, aes(x = pieces, y = us_price)) +
   geom_point(alpha = 0.6, color = &quot;deeppink3&quot;) +
   geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;black&quot;, linetype = &quot;dashed&quot;) +
@@ -566,9 +559,9 @@ mengarah naik. Namun demikian, terdapat beberapa outlier, seperti produk
 dengan harga tinggi tapi jumlah pieces tidak terlalu banyak. Selain itu,
 ada warning bahwa 69 baris data dihapus karena memiliki nilai kosong
 atau di luar rentang skala.</p>
-<ul>
-<li>Visualisasi 4 -&gt; Komposisi Penjualan Berdasarkan Usia</li>
-</ul>
+</div>
+<div id="komposisi-penjualan-berdasarkan-usia" class="section level3">
+<h3>2.4 Komposisi Penjualan Berdasarkan Usia</h3>
 <pre class="r"><code>penjualan_usia &lt;- lego_sales %&gt;%
   group_by(age) %&gt;%
   summarise(total_quantity = sum(quantity, na.rm = TRUE))
@@ -589,9 +582,9 @@ merupakan kelompok usia yang paling banyak melakukan pembelian lego,
 sedangkan setelah usia 50 tahun terjadi penurunan signifikan. Hal ini
 menunjukkan bahwa produk lego paling banyak diminati oleh konsumen
 dewasa muda hingga usia pertengahan.</p>
-<ul>
-<li>Visualisasi 5 -&gt; Heatmap Korelasi Antar Variabel Numerik</li>
-</ul>
+</div>
+<div id="heatmap-korelasi-antar-variabel-numerik" class="section level3">
+<h3>2.5 Heatmap Korelasi Antar Variabel Numerik</h3>
 <pre class="r"><code>numerik_data &lt;- lego_sales %&gt;%
   select(age, pieces, us_price, quantity, revenue)
 
@@ -618,13 +611,15 @@ sangat memengaruhi revenue, sementara usia customer tidak memiliki
 pengaruh yang signifikan terhadap variabel-variabel numerik lainnya
 dalam dataset ini.</p>
 </div>
+</div>
 <div id="eksplorasi-data-awal-2" class="section level2">
 <h2>3. Eksplorasi data awal</h2>
 <ul>
-<li>Tuliskan 3–5 insight menarik dari visualisasi yang dibuat.</li>
-<li>Contoh: Apakah tema tertentu mendominasi revenue? Apakah set dengan
-lebih banyak pieces selalu lebih mahal? Apakah ada preferensi tema LEGO
-pada kelompok usia tertentu?</li>
+<li><p><strong>Tuliskan 3–5 insight menarik dari visualisasi yang
+dibuat.</strong></p></li>
+<li><p><strong>Contoh: Apakah tema tertentu mendominasi revenue? Apakah
+set dengan lebih banyak pieces selalu lebih mahal? Apakah ada preferensi
+tema LEGO pada kelompok usia tertentu?</strong></p></li>
 </ul>
 <p><strong>Jawaban:</strong></p>
 <ul>

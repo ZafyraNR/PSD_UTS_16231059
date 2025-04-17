@@ -15,13 +15,15 @@ suppressWarnings({
 data("lego_sales")
 glimpse(lego_sales)
 ```
+
 ## 1. Eksplorasi data awal
-- Tampilkan informasi umum dataset (jumlah data, kolom, tipe data).
-- Lakukan pembersihan data sederhana jika diperlukan (null values, duplikat, dll).
+**1.1 Tampilkan informasi umum dataset (jumlah data, kolom, tipe data).**
+
+**1.2 Lakukan pembersihan data sederhana jika diperlukan (null values, duplikat, dll).**
 
 **Jawaban:**
 
-- Informasi umum
+### 1.1 Informasi umum
 ```{r}
 # Load dataset
 dimensi <- dim(lego_sales)
@@ -31,7 +33,7 @@ tipe_data <- sapply(lego_sales, class)
 summary(lego_sales) # statistik ringkasan
 ```
 
-- Pembersihan data
+### 1.2 Pembersihan data
 ```{r}
 # Pembersihan dataset
 na_total <- colSums(is.na(lego_sales)) # Cek missing values
@@ -57,17 +59,21 @@ list(
 
 
 ## 2. Eksplorasi data awal
-Visualisasi Wajib Buat minimal 5 visualisasi dari kategori berikut:
+**Visualisasi Wajib Buat minimal 5 visualisasi dari kategori berikut:**
 
-- 10 customer dengan jumlah transaksi terbanyak
-- 10 tema LEGO Terpopuler Berdasarkan Penjualan
-- Sebaran Jumlah Pieces dan Harga
-- Komposisi Penjualan Berdasarkan Usia
-- Heatmap Korelasi Antar Variabel Numerik
+**2.1 10 customer dengan jumlah transaksi terbanyak**
+
+**2.2 10 tema LEGO Terpopuler Berdasarkan Penjualan**
+
+**2.3 Sebaran Jumlah Pieces dan Harga**
+
+**2.4 Komposisi Penjualan Berdasarkan Usia**
+
+**2.5 Heatmap Korelasi Antar Variabel Numerik**
 
 **Jawaban:**
 
-- Visualisasi 1 -> 10 customer dengan jumlah transaksi terbanyak
+### 2.1 10 customer dengan jumlah transaksi terbanyak
 ```{r}
 top_customers <- lego_sales %>%
   count(customer_id, sort = TRUE) %>%
@@ -83,7 +89,7 @@ ggplot(top_customers, aes(x = reorder(customer_id, n), y = n)) +
 
 Visualisasi di atas merupakan diagram batang yang menunjukkan 10 customer dengan jumlah transaksi terbanyak. Sumbu X dalam visualisasi ini adalah jumlah transaksi dan sumbu Y adalah nama customer yang didapat dengan menggunakan fungsi mutate untuk membuat kolom data baru, yaitu customer id. Visualisasi data ini menunjukkan bahwa Jackson_Dominguez adalah customer dengan jumlah transaksi terbanyak (lebih dari 6 kali), disusul oleh customer lainnya seperti Josie_Paley, Tristin_Marcy, dan Sarah_Wagner memiliki jumlah transaksi sebanyak 5 kali dan dapat dilihat sebagian besar customer dalam top 10 ini melakukan transaksi 4-5 kali, sehingga kesimpulan dari visuaisasi data ini adalah meskipun jumlah transaksi tiap customer relatif kecil (maksimal sekitar 6), mereka tetap menjadi pelanggan setia yang melakukan pembelian berulang. Ini menunjukkan kemungkinan adanya pola pembelian reguler oleh customer tertentu.
 
-- Visualisasi 2 -> 10 tema LEGO Terpopuler Berdasarkan Penjualan
+### 2.2 10 tema LEGO Terpopuler Berdasarkan Penjualan
 ```{r}
 lego_sales <- lego_sales %>%
   mutate(customer_id = paste(first_name, last_name, sep = "_"))
@@ -102,7 +108,7 @@ ggplot(top_customers, aes(x = reorder(customer_id, n), y = n)) +
 
 Visualisasi di atas merupakan diagram batang yang menunjukkan 10 tema lego terpopler yang dihitung berdasarkan data penjualan. Sumbu X dalam visualisasi ini adalah jumlah terjual dan sumbu Y adalah tema lego yang dijual. Visualisasi data ini menunjukkan bahwa tema lego yang paling laris adalah tema Star Wars, disusul oleh tema Nexo Knights, Mixels, dan Gear, sehingga kesimpulan dari visuaisasi data ini adalah lego bertema basis cerita atau film yang kuat seperti Star Wars lebih diminati dan banyak dibeli.
 
-- Visualisasi 3 -> Sebaran Jumlah Pieces dan Harga
+### 2.3 Sebaran Jumlah Pieces dan Harga
 ```{r}
 ggplot(lego_sales, aes(x = pieces, y = us_price)) +
   geom_point(alpha = 0.6, color = "deeppink3") +
@@ -114,7 +120,7 @@ ggplot(lego_sales, aes(x = pieces, y = us_price)) +
 
 Visualisasi di atas merupakan scatter plot yang menunjukkan hubungan antara jumlah pieces (komponen LEGO) dengan harga dalam USD. Sumbu X adalah jumlah pieces, sedangkan sumbu Y adalah harga (USD). Garis linier hitam untuk menunjukkan tren hubungan antar variabel, sehingga visualisasi ini menunjukkan bahwa secara umum terdapat hubungan positif antara jumlah pieces dan harga—semakin banyak pieces, semakin mahal harga lego set tersebut. Hal ini ditunjukkan oleh garis regresi yang mengarah naik. Namun demikian, terdapat beberapa outlier, seperti produk dengan harga tinggi tapi jumlah pieces tidak terlalu banyak. Selain itu, ada warning bahwa 69 baris data dihapus karena memiliki nilai kosong atau di luar rentang skala.
 
-- Visualisasi 4 -> Komposisi Penjualan Berdasarkan Usia
+### 2.4 Komposisi Penjualan Berdasarkan Usia
 ```{r}
 penjualan_usia <- lego_sales %>%
   group_by(age) %>%
@@ -129,7 +135,7 @@ ggplot(penjualan_usia, aes(x = age, y = total_quantity)) +
 
 Visualisasi di atas merupakan diagram batang menggambarkan jumlah produk lego yang terjual berdasarkan usia customer. Sumbu X adalah usia, sedangkan sumbu Y adalah total jumlah terjual. Data ini diperoleh dari agregasi penjualan berdasarkan usia customer. sehingga visualisasi ini menunjukkan bahwa penjualan tertinggi terjadi pada rentang usia 30-an, dengan puncak penjualan di usia sekitar 33 tahun. Usia 20–40 tahun merupakan kelompok usia yang paling banyak melakukan pembelian lego, sedangkan setelah usia 50 tahun terjadi penurunan signifikan. Hal ini menunjukkan bahwa produk lego paling banyak diminati oleh konsumen dewasa muda hingga usia pertengahan.
 
-- Visualisasi 5 -> Heatmap Korelasi Antar Variabel Numerik
+### 2.5 Heatmap Korelasi Antar Variabel Numerik
 ```{r}
 numerik_data <- lego_sales %>%
   select(age, pieces, us_price, quantity, revenue)
@@ -149,8 +155,9 @@ Visualisasi di atas merupakan heatmap yang menggambarkan korelasi antar variabel
 
 
 ## 3. Eksplorasi data awal
-- Tuliskan 3–5 insight menarik dari visualisasi yang dibuat.
-- Contoh: Apakah tema tertentu mendominasi revenue? Apakah set dengan lebih banyak pieces selalu lebih mahal? Apakah ada preferensi tema LEGO pada kelompok usia tertentu?
+- **Tuliskan 3–5 insight menarik dari visualisasi yang dibuat.**
+
+- **Contoh: Apakah tema tertentu mendominasi revenue? Apakah set dengan lebih banyak pieces selalu lebih mahal? Apakah ada preferensi tema LEGO pada kelompok usia tertentu?**
 
 **Jawaban:**
 
