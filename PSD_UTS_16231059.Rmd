@@ -55,6 +55,7 @@ list(
 )
 ```
 
+
 ## 2. Eksplorasi data awal
 Visualisasi Wajib Buat minimal 5 visualisasi dari kategori berikut:
 
@@ -126,7 +127,7 @@ ggplot(penjualan_usia, aes(x = age, y = total_quantity)) +
   theme_minimal()
 ```
 
-Visualisasi ini adalah diagram batang menggambarkan jumlah produk lego yang terjual berdasarkan usia customer. Sumbu X adalah usia, sedangkan sumbu Y adalah total jumlah terjual. Data ini diperoleh dari agregasi penjualan berdasarkan usia customer. sehingga visualisasi ini menunjukkan bahwa penjualan tertinggi terjadi pada rentang usia 30-an, dengan puncak penjualan di usia sekitar 33 tahun. Usia 20–40 tahun merupakan kelompok usia yang paling banyak melakukan pembelian lego, sedangkan setelah usia 50 tahun terjadi penurunan signifikan. Hal ini menunjukkan bahwa produk lego paling banyak diminati oleh konsumen dewasa muda hingga usia pertengahan.
+Visualisasi di atas merupakan diagram batang menggambarkan jumlah produk lego yang terjual berdasarkan usia customer. Sumbu X adalah usia, sedangkan sumbu Y adalah total jumlah terjual. Data ini diperoleh dari agregasi penjualan berdasarkan usia customer. sehingga visualisasi ini menunjukkan bahwa penjualan tertinggi terjadi pada rentang usia 30-an, dengan puncak penjualan di usia sekitar 33 tahun. Usia 20–40 tahun merupakan kelompok usia yang paling banyak melakukan pembelian lego, sedangkan setelah usia 50 tahun terjadi penurunan signifikan. Hal ini menunjukkan bahwa produk lego paling banyak diminati oleh konsumen dewasa muda hingga usia pertengahan.
 
 - Visualisasi 5 -> Heatmap Korelasi Antar Variabel Numerik
 ```{r}
@@ -144,4 +145,21 @@ ggplot(cor_df, aes(x = Var1, y = Var2, fill = Freq)) +
   theme_minimal()
 ```
 
-Visualisasi ini adalah heatmap yang menggambarkan korelasi antar variabel numerik dalam dataset, yaitu age, pieces, us_price, quantity, dan revenue. Warna semakin gelap menunjukkan nilai korelasi yang semakin tinggi, dengan skala dari 0 (tidak berkorelasi) hingga 1 (sangat berkorelasi). Dari heatmap ini terlihat bahwa pieces memiliki korelasi sangat kuat dengan us_price (0.94) dan cukup tinggi dengan revenue (0.83), us_price juga berkorelasi tinggi dengan revenue (0.87), age memiliki korelasi sangat rendah dengan semua variabel lainnya, sehingga visualisasi ini menyimpulkan bahwa jumlah pieces dan harga sangat memengaruhi revenue, sementara usia customer tidak memiliki pengaruh yang signifikan terhadap variabel-variabel numerik lainnya dalam dataset ini.
+Visualisasi di atas merupakan heatmap yang menggambarkan korelasi antar variabel numerik dalam dataset, yaitu age, pieces, us_price, quantity, dan revenue. Warna semakin gelap menunjukkan nilai korelasi yang semakin tinggi, dengan skala dari 0 (tidak berkorelasi) hingga 1 (sangat berkorelasi). Dari heatmap ini terlihat bahwa pieces memiliki korelasi sangat kuat dengan us_price (0.94) dan cukup tinggi dengan revenue (0.83), us_price juga berkorelasi tinggi dengan revenue (0.87), age memiliki korelasi sangat rendah dengan semua variabel lainnya, sehingga visualisasi ini menyimpulkan bahwa jumlah pieces dan harga sangat memengaruhi revenue, sementara usia customer tidak memiliki pengaruh yang signifikan terhadap variabel-variabel numerik lainnya dalam dataset ini.
+
+
+## 3. Eksplorasi data awal
+- Tuliskan 3–5 insight menarik dari visualisasi yang dibuat.
+- Contoh: Apakah tema tertentu mendominasi revenue? Apakah set dengan lebih banyak pieces selalu lebih mahal? Apakah ada preferensi tema LEGO pada kelompok usia tertentu?
+
+**Jawaban:**
+
+- Dari visualisasi 1, terlihat bahwa customer dengan transaksi terbanyak hanya melakukan sekitar 4–6 transaksi. Ini menunjukkan bahwa walaupun frekuensi pembelian per customer tidak tinggi, terdapat kelompok pelanggan setia yang melakukan pembelian berulang. Strategi retensi seperti membership atau program loyalitas bisa sangat efektif untuk kelompok ini.
+
+- Berdasarkan visualisasi 2, tema lego Star Wars memiliki volume penjualan tertinggi dibandingkan tema lainnya. Ini menunjukkan bahwa tema yang berasosiasi dengan franchise populer memiliki daya tarik pasar yang lebih kuat, dan dapat dijadikan fokus utama dalam strategi pemasaran atau bundling produk.
+
+- Dari visualisasi 3 (scatter plot), terlihat adanya korelasi positif antara jumlah pieces dan harga. Semakin banyak jumlah pieces, semakin tinggi pula harga lego set tersebut. Ini diperkuat oleh garis regresi yang naik dan korelasi 0.94 antara pieces dan us_price pada heatmap. Namun, juga ada outlier—set yang mahal tapi tidak memiliki banyak pieces, mungkin karena nilai koleksi atau lisensi khusus.
+
+- Visualisasi 4 menunjukkan bahwa pembelian LEGO tertinggi berasal dari customer berusia 30–40 tahun, dengan puncak di usia 33. Ini menunjukkan bahwa lego tidak hanya disukai anak-anak, tapi juga oleh dewasa muda (kemungkinan kolektor atau pembeli untuk anak mereka). Segmentasi usia ini bisa menjadi target utama dalam kampanye promosi.
+
+- Berdasarkan heatmap korelasi (visualisasi 5), revenue sangat berkorelasi dengan us_price (0.87) dan pieces (0.83). Ini menunjukkan bahwa pendapatan tidak hanya tergantung pada banyaknya unit yang terjual, tapi juga pada set lego yang lebih kompleks dan lebih mahal. Produk dengan value tinggi punya kontribusi besar terhadap total pendapatan.
